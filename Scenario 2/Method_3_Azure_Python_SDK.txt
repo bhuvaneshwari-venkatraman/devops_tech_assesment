@@ -1,0 +1,19 @@
+Using Azure python SDK to describe VM instance metadata:
+
+from azure.identity import DefaultAzureCredential
+from azure.mgmt.compute import ComputeManagementClient
+
+def main():
+    client = ComputeManagementClient(
+        credential=DefaultAzureCredential(),
+        subscription_id="c198791f-9266-446c-b1c0-02093a331f60",
+    )
+
+    vm_json = client.virtual_machines.get(
+        resource_group_name="bvnewrg",
+        vm_name="azbvdemo1",
+    )
+    print(vm_json)
+
+if __name__ == "__main__":
+    main()

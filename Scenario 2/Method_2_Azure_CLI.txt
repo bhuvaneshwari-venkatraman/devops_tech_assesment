@@ -1,0 +1,2 @@
+Configre Azure CLI in client side
+az vm show --name azbvdemo1 --resource-group  bvnewrg
