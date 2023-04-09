@@ -1,0 +1,16 @@
+1)Create 2 VM for supporting Webtier(1) -- windowsVM.zip
+2 VM are created for supporting availability set, make sure on Public IP and DNS updated, NSG , and IIS is enabled
+
+2) Create a Public load balncer --LB.zip
+
+3))Create 2 VM for supporting AppTier(1) -- azbvlinux.zip
+2 VM are created for supporting availability set , make sure its having seperate subnet , Netwrok Interface , Public IP is not required
+
+4) Create Internal Load Balancer --LB.zip
+
+5) Create a DB tier , in this case we are creating SQL Data base and geo replicating for Failover situations--azsqpldb.zip
+
+
+Architecture
+
+https://app.diagrams.net/?src=about#Hsunradh%2Fhello-world%2Fdevelop%2FUntitled%20Diagram.drawio , also commited the architecture diagram in the github repo link
