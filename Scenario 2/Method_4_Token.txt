@@ -13,7 +13,7 @@ Registration succeeded.
   "tenantId": "613cad6c-4338-473f-8a0a-b40263463aba",
   "type": "Microsoft.ManagedIdentity/userAssignedIdentities"
 }
-sundararaman [ ~ ]$ 
+
 
 -----------------------------------------
 2)Pwershell command
