@@ -1,0 +1,150 @@
+1)Create a AZure Identity : az identity create -g bvnewrg -n bvUAMI
+Resource provider 'Microsoft.ManagedIdentity' used by this operation is not registered. We are registering for you.
+Registration succeeded.
+{
+  "clientId": "9fcb3f22-1ece-4317-968c-deba4bd8d0cb",
+  "id": "/subscriptions/c198791f-9266-446c-b1c0-02093a331f60/resourcegroups/bvnewrg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/bvUAMI",
+  "location": "eastus2",
+  "name": "bvUAMI",
+  "principalId": "c91a4fb5-188c-483f-99bd-b6a046b6e06e",
+  "resourceGroup": "bvnewrg",
+  "systemData": null,
+  "tags": {},
+  "tenantId": "613cad6c-4338-473f-8a0a-b40263463aba",
+  "type": "Microsoft.ManagedIdentity/userAssignedIdentities"
+}
+sundararaman [ ~ ]$ 
+
+-----------------------------------------
+2)Pwershell command
+Create a token : 
+# Get an access token for managed identities for Azure resources
+$response = Invoke-WebRequest -Uri 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https%3A%2F%2Fmanagement.azure.com%2F' `
+                              -Headers @{Metadata="true"}
+$content =$response.Content | ConvertFrom-Json
+$access_token = $content.access_token
+echo "The managed identities for Azure resources access token is $access_token"
+
+---------------------------------------------
+3)
+GET https://management.azure.com//subscriptions/c198791f-9266-446c-b1c0-02093a331f60/resourceGroups/bvnewrg/providers/Microsoft.Compute/virtualMachines/azbvdemob1?api-version=2021-03-01
+
+Bearer token: 
+eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6Ii1LSTNROW5OUjdiUm9meG1lWm9YcWJIWkdldyIsImtpZCI6Ii1LSTNROW5OUjdiUm9meG1lWm9YcWJIWkdldyJ9.eyJhdWQiOiJodHRwczovL21hbmFnZW1lbnQuY29yZS53aW5kb3dzLm5ldC8iLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC82MTNjYWQ2Yy00MzM4LTQ3M2YtOGEwYS1iNDAyNjM0NjNhYmEvIiwiaWF0IjoxNjgxMTk1MTI0LCJuYmYiOjE2ODExOTUxMjQsImV4cCI6MTY4MTE5OTkyNCwiYWNyIjoiMSIsImFpbyI6IkFZUUFlLzhUQUFBQVFGU1lCM1VVaGUwSzArdEZwMkpuMTg5UlRIaVN6SXd1all5WlU0MUY1TGR2dFRLK3lBSWUyV1I5a3RyMklsSGs2eEVoaXN2VW5xYm5ObXRVbWVabzc1R1pDYlR0TGxTL01YWlZ6QXRKTlF0TnYrRHhiWmUzNE1paXNFYzJib0dvU3BGdDJDTVFXeEJqdkx5OHBrdk1JZU9QY0ZmQXJORHcxOFV4LzcvV3VuQT0iLCJhbHRzZWNpZCI6IjE6bGl2ZS5jb206MDAwMzAwMDA1RDc3MDlBMSIsImFtciI6WyJwd2QiLCJtZmEiXSwiYXBwaWQiOiJjNDRiNDA4My0zYmIwLTQ5YzEtYjQ3ZC05NzRlNTNjYmRmM2MiLCJhcHBpZGFjciI6IjIiLCJlbWFpbCI6InN1bnJhZGgudGVjaG1haWxzQGdtYWlsLmNvbSIsImZhbWlseV9uYW1lIjoiUmFkaGFrcmlzaG5hbiIsImdpdmVuX25hbWUiOiJTdW5kYXJhcmFtYW4iLCJncm91cHMiOlsiMWI3MGM5YWQtYzQwYi00ODRmLTkxM2EtOWU1N2NkMjFhOTEwIl0sImlkcCI6ImxpdmUuY29tIiwiaXBhZGRyIjoiNDkuMjA1LjE1MC4xOCIsIm5hbWUiOiJTdW5kYXJhcmFtYW4gUmFkaGFrcmlzaG5hbiIsIm9pZCI6IjEyMmEzZTM4LTE2N2ItNDhmNS05NzJjLTRmYzdhZGQwMWMzNSIsInB1aWQiOiIxMDAzMjAwMjkyRjRGMjQ4IiwicmgiOiIwLkFVb0FiSzA4WVRoRFAwZUtDclFDWTBZNnVrWklmM2tBdXRkUHVrUGF3ZmoyTUJPSkFDTS4iLCJzY3AiOiJ1c2VyX2ltcGVyc29uYXRpb24iLCJzdWIiOiJaSmN2aFVSbUZZSWhhNDQ2YXpRR1VFRzlydE92aWpVQkFXRnJkeVFQVlJnIiwidGlkIjoiNjEzY2FkNmMtNDMzOC00NzNmLThhMGEtYjQwMjYzNDYzYWJhIiwidW5pcXVlX25hbWUiOiJsaXZlLmNvbSNzdW5yYWRoLnRlY2htYWlsc0BnbWFpbC5jb20iLCJ1dGkiOiJiRVJlVndPUGprbXpjNzBsMFV3eUFBIiwidmVyIjoiMS4wIiwid2lkcyI6WyI2MmU5MDM5NC02OWY1LTQyMzctOTE5MC0wMTIxNzcxNDVlMTAiXSwieG1zX3RjZHQiOjE2ODA5NzQ0ODB9.nwtf_Sg1-Bjplc07P_dXXkxDGLXr_ZqV3fCx2C5Dy0c6rlTsYZyuuuV4mGwiXaDVo6Azv2SFqnjd4SwYfSNSunfuTWnJvSLZsPm-tfjz3cNTmktAjZW1Y70g-yDz2NXUfyilYQZo1AAEVakZK-0dZgvf727Sb5oPtSfqCm0CGXQd3sFX0gddaoenFQIxB0AyRfVQEBwiH1uoWyZgkeEHdhCIpbfSQvJHy1v2sdNJn1vIoGK3KaGm5zK4JFvm1AeF1GKyS0_2hxJ22PWqoKqUQLqRu4Iqut1dcMtf0W--kwEVQ_mY0abel40OysUeL1qD-pIKnaJ1dV1NqI7DvK1t8w
+
+----------------------------------------------------------------
+4)
+Response:
+{
+    "name": "azbvdemob1",
+    "id": "/subscriptions/c198791f-9266-446c-b1c0-02093a331f60/resourceGroups/bvnewrg/providers/Microsoft.Compute/virtualMachines/azbvdemob1",
+    "type": "Microsoft.Compute/virtualMachines",
+    "location": "eastus2",
+    "properties": {
+        "vmId": "34526e67-a659-46b0-928a-13e33b7a12c7",
+        "availabilitySet": {
+            "id": "/subscriptions/c198791f-9266-446c-b1c0-02093a331f60/resourceGroups/bvnewrg/providers/Microsoft.Compute/availabilitySets/AVAILSET_VM_APP"
+        },
+        "hardwareProfile": {
+            "vmSize": "Standard_B2ms"
+        },
+        "storageProfile": {
+            "imageReference": {
+                "publisher": "canonical",
+                "offer": "0001-com-ubuntu-minimal-bionic",
+                "sku": "minimal-18_04-lts-gen2",
+                "version": "latest",
+                "exactVersion": "18.04.202303290"
+            },
+            "osDisk": {
+                "osType": "Linux",
+                "name": "azbvdemob1_OsDisk_1_64eb5881e69d4be39a98d2f92a48e3e2",
+                "createOption": "FromImage",
+                "caching": "ReadWrite",
+                "managedDisk": {
+                    "storageAccountType": "Premium_LRS",
+                    "id": "/subscriptions/c198791f-9266-446c-b1c0-02093a331f60/resourceGroups/BVNEWRG/providers/Microsoft.Compute/disks/azbvdemob1_OsDisk_1_64eb5881e69d4be39a98d2f92a48e3e2"
+                },
+                "deleteOption": "Delete",
+                "diskSizeGB": 30
+            },
+            "dataDisks": []
+        },
+        "osProfile": {
+            "computerName": "azbvdemob1",
+            "adminUsername": "azureuser",
+            "linuxConfiguration": {
+                "disablePasswordAuthentication": true,
+                "ssh": {
+                    "publicKeys": [
+                        {
+                            "path": "/home/azureuser/.ssh/authorized_keys",
+                            "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC+b7hDQoNmjWqMYzXtQ5Tn7DRlLxhDcUGnGNMMETw9CZGK64BnxrAdAZ7bCHl6gf50m3+/vO3Drsu5C6+t0UkJNh1oB/zb+Pe1HPdd9xEk45WYrGXR7f9JYIfZbUM2rciAhMyXzQcL6zXw0Qo/MdVPpKoX47Qqq9wgpDMWOoxqBakvrt6MwPrSxwnHtwQyBNpmDHmtAnPFydlaTEBccUsJoi4NJAo5U3yMWX5FUH+eTrqOKbOMRj0uZDBwVSrXNs1x4RIB30vybWqoN6TQnJBEDUUYjBjX1q5e1c7LF90NxqIb8O9J7HPIBuIw+GV1nCbysjxD4ymp9PGb1/SkmbBbW6sBp6mkVo+0Q3mLGmsNbdUHSLOQ2gcTuTtBAuW+iAemYKQ8+Y2wfw6r+avWtfGni17Alp5ANloKlCMcpQfWS1fGVBjxH04CqxCWVnjKNnlqmYEL74uAr/PPry73mYpKHC0TfdMPNP4JHIhB1g3G/lNKoZeFquAq+ZYu/l7NFnU= generated-by-azure"
+                        }
+                    ]
+                },
+                "provisionVMAgent": true,
+                "patchSettings": {
+                    "patchMode": "ImageDefault",
+                    "assessmentMode": "ImageDefault"
+                }
+            },
+            "secrets": [],
+            "allowExtensionOperations": true,
+            "requireGuestProvisionSignal": true
+        },
+        "securityProfile": {
+            "uefiSettings": {
+                "secureBootEnabled": true,
+                "vTpmEnabled": true
+            },
+            "securityType": "TrustedLaunch"
+        },
+        "networkProfile": {
+            "networkInterfaces": [
+                {
+                    "id": "/subscriptions/c198791f-9266-446c-b1c0-02093a331f60/resourceGroups/bvnewrg/providers/Microsoft.Network/networkInterfaces/azbvdemob150",
+                    "properties": {
+                        "deleteOption": "Detach"
+                    }
+                }
+            ]
+        },
+        "diagnosticsProfile": {
+            "bootDiagnostics": {
+                "enabled": true
+            }
+        },
+        "provisioningState": "Succeeded"
+    },
+    "resources": [
+        {
+            "name": "GuestAttestation",
+            "id": "/subscriptions/c198791f-9266-446c-b1c0-02093a331f60/resourceGroups/bvnewrg/providers/Microsoft.Compute/virtualMachines/azbvdemob1/extensions/GuestAttestation",
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "location": "eastus2",
+            "properties": {
+                "autoUpgradeMinorVersion": true,
+                "provisioningState": "Succeeded",
+                "publisher": "Microsoft.Azure.Security.LinuxAttestation",
+                "type": "GuestAttestation",
+                "typeHandlerVersion": "1.0",
+                "settings": {
+                    "AttestationConfig": {
+                        "MaaSettings": {
+                            "maaEndpoint": "",
+                            "maaTenantName": "GuestAttestation"
+                        },
+                        "AscSettings": {
+                            "ascReportingEndpoint": "",
+                            "ascReportingFrequency": ""
+                        },
+                        "useCustomToken": "false",
+                        "disableAlerts": "false"
+                    }
+                }
+            }
+        }
+    ]
+}
+----------------------
